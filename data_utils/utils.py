@@ -185,7 +185,7 @@ def collate_fn(samples):
     trg_lens = []
 
     for sample in samples:
-        image, token, src_len, trg_len = sample
+        image, token, trg_len = sample
         images.append(image)
         tokens.append(token)
         trg_lens.append(trg_len)
