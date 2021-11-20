@@ -58,7 +58,7 @@ class OCRDataset(Dataset):
         for idx, token in enumerate([self.vocab.sos_token] + label + [self.vocab.eos_token]):
             tokens[idx] = self.vocab.stoi[token]
         
-        return img, tokens, torch.tensor([self.max_len]), torch.tensor([len([self.vocab.sos_token] + label + [self.vocab.eos_token])]).long()
+        return img, tokens, torch.tensor([len([self.vocab.sos_token] + label + [self.vocab.eos_token])]).long()
 
     def get_groundtruth(self, img_dir):
         self.max_len = 0
@@ -88,9 +88,8 @@ class OCRDataset(Dataset):
 
 class Batch:
     "Object for holding a batch of data with mask during training."
-    def __init__(self, imgs, tokens, src_len, trg_len, pad=0):
+    def __init__(self, imgs, tokens, trg_len, pad=0):
         self.imgs = imgs.cuda()
         self.src_mask = None
         self.tokens = tokens.cuda()
-        self.src_lens = src_len.cuda()
         self.trg_lens = trg_len.cuda()

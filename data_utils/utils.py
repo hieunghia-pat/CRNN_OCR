@@ -182,14 +182,12 @@ def extract_archive(from_path, to_path=None, overwrite=False):
 def collate_fn(samples):
     images = []
     tokens = []
-    src_lens = []
     trg_lens = []
 
     for sample in samples:
         image, token, src_len, trg_len = sample
         images.append(image)
         tokens.append(token)
-        src_lens.append(src_len)
         trg_lens.append(trg_len)
 
     max_w = 0
@@ -211,10 +209,9 @@ def collate_fn(samples):
     
     images = torch.cat(images)
     tokens_tensor = torch.cat([token.unsqueeze(0) for token in tokens], dim=0)
-    src_lens_tensor = torch.cat([src_len.unsqueeze(0) for src_len in src_lens], dim=0)
     trg_lens_tensor = torch.cat([trg_len.unsqueeze(0) for trg_len in trg_lens], dim=0)
 
-    return images, tokens_tensor, src_lens_tensor, trg_lens_tensor
+    return images, tokens_tensor, trg_lens_tensor
 
 def preprocess_sentence(sentence, level="character"):
     if level == "character":

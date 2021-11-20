@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 class NoamOpt:
@@ -41,7 +42,10 @@ class SimpleLossCompute:
         self.criterion = criterion
         self.opt = opt
         
-    def __call__(self, x, y, x_len, y_len):
+    def __call__(self, x, y, y_len):
+        T, N, _ = x.shape
+        x_len = [[T]*N]
+        x_len = torch.tensor(x_len).long().cuda()
         loss = self.criterion(x, y, x_len, y_len)
         if self.opt is not None:
             loss.backward()
